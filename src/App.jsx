@@ -1,35 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { Routes, Route, Navigate, Link } from "react-router-dom";
+import colorPreset from "./data/colors.json";
+
+import { Nav } from "./layouts";
+import { ColorList, AddColor, DisplayColor } from "./pages";
+
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [colorList, setColorList] = useState(colorPreset);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Routes>
+        <Route path="/" element={<Nav />}>
+          <Route
+            index
+            element={<Link to="colors">Go To Color List Page</Link>}
+          />
+          <Route path="colors">
+            <Route index element={<ColorList colorList={colorList} />} />
+            <Route path="new" element={<AddColor setColorList={setColorList} />} />
+            <Route path=":id" element={<DisplayColor />} />
+          </Route>
+          <Route path="*" element={<Navigate to="colors"/>} />
+        </Route>
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
